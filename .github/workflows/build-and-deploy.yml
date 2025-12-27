@@ -1,4 +1,4 @@
-name: Build and Push to Docker Hub and Deploy to EC2
+name: Push to Docker Hub and Deploy to EC2
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ permissions:
 jobs:
 
   docker:
-    uses: ./.github/workflows/docker.yml
+    uses: ./.github/workflows/docker-build.yml
     secrets: inherit
   deploy:
     needs: docker

@@ -1,4 +1,4 @@
-name: Build and Push to Docker Hub
+name: Push Docker Images to Docker Hub
 
 on:
   workflow_dispatch:
@@ -28,14 +28,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PAT }}
-      - name: Build and Push Docker Images
+      - name: Build Docker Images
         run: |
           make init
           make build
+      - name: Push Docker Images to Docker Hub
+        run: |
+          make push

@@ -4,10 +4,6 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    x-bake:
-      platforms:
-        - linux/amd64
-        - linux/arm64
     container_name: express-app
     restart: unless-stopped
     environment:
@@ -26,10 +22,6 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    x-bake:
-      platforms:
-        - linux/amd64
-        - linux/arm64
     container_name: nginx-proxy
     restart: unless-stopped
     ports:

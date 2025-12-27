@@ -52,23 +52,15 @@ init: env
 	@echo ssh -i "$(EC2_KEY_NAME)" ubuntu@$(EC2_DEPLOY_HOST) > ec2-ssh.sh
 	@chmod +x ec2-ssh.sh
 	@echo "Generated ./ec2-ssh.sh to connect to the EC2 instance."
-	@echo "Initialize Multi-Architecture Docker Buildx..."
-	@if ! docker buildx ls | grep -q multiarch; then \
-		echo "Creating new Buildx multiarch builder..."; \
-		docker run --privileged --rm tonistiigi/binfmt --install all;\
-		docker buildx create --name multiarch --use; \
-		docker buildx inspect --bootstrap; \
-	else \
-		echo "Buildx multiarch builder already exists."; \
-	fi
 	@echo "Production setup initialization complete."
 up:
 	docker compose up --build
 down:
 	docker compose down
 build:
-	cd app && make build
-	cd nginx && make build
+	docker compose build --no-cache
+push:
+	docker compose push
 deploy:
 	@echo "Deploying to EC2 instance at $(EC2_DEPLOY_HOST)..."
 	@ssh -i "$(EC2_KEY_NAME)" ubuntu@$(EC2_DEPLOY_HOST) 'mkdir -p $(EC2_DEPLOY_DIR)'
