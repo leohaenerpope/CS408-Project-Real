@@ -20,6 +20,8 @@ Install the following:
 - Install [VS Code](https://code.visualstudio.com/download)
 - Install [Node.js](https://nodejs.org/en/download) version 24 or higher
 - Install [Docker](https://docs.docker.com/get-docker/) on your local machine.
+- Restart your machine after installing everything to ensure all environment variables
+  are set correctly.
 
 **IMPORTANT:** Make sure you select "Automatically install the necessary tools"
 when installing Node.js on Windows to ensure that all required components are set up
