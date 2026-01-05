@@ -26,7 +26,13 @@ app.use(expressLayouts);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// Static files in public directory images, css, js, etc.
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Static html files in the static directory
+// This is for static files that are not using a template engine
+app.use(express.static(path.join(__dirname, 'static')));
+
 // Middleware to attach database to request
 app.use((request, response, next) => {
   request.db = databaseManager.dbHelpers;
