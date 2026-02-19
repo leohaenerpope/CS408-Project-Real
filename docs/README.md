@@ -34,4 +34,4 @@ uses Docker for containerization and simplified deployment.
 
 ## Team Workflow
 
-- Detail your teams workflow here.
+- Solo developer - I am doing this project solo.
