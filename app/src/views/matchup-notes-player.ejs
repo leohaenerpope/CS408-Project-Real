@@ -15,7 +15,7 @@
             </select>
           </div>
           <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            <a href="/matchups/<%= playerSlug %>/add" class="btn btn-success">+ Add New Note</a>
+            <a href="/matchups/<%= playerId %>/add" class="btn btn-success">+ Add New Note</a>
           </div>
         </div>
   
@@ -23,28 +23,39 @@
   
         <div class="matchup-list">
           
-          <div class="card bg-dark text-white border-primary mb-4">
-            <div class="card-header bg-primary d-flex justify-content-between">
-              <span><strong>Against:</strong> Stephen Curry</span>
-              <span><strong>Matchup Date:</strong> 2026-03-10</span>
-            </div>
-            <div class="card-body">
-              <div class="row text-center mb-3 border-bottom border-secondary pb-2">
-                <div class="col-4"><strong>28</strong> PTS</div>
-                <div class="col-4"><strong>8</strong> AST</div>
-                <div class="col-4"><strong>4</strong> REB</div>
+          <% if (matchups.length === 0) { %> 
+            <p>No matchup notes yet.</p>
+          <% } %>
+
+          <% matchups.forEach(matchup => { %>
+            <div class="card bg-dark text-white border-primary mb-4">
+              <div class="card-header bg-primary d-flex justify-content-between">
+                <span><strong>Against:</strong> <%= matchup.opponentName %></span>
+                <span><strong>Matchup Date:</strong> <%= matchup.date %></span>
               </div>
-              
-              <p class="card-text text-light-50 italic">
-                Curry is too small and no match for lebron
-              </p>
-              
-              <div class="mt-3 text-end">
-                <a href="/matchups/<%= playerSlug %>/edit/1" class="btn btn-sm btn-outline-warning me-2">Manage</a>
-                <button class="btn btn-sm btn-outline-danger">Delete</button>
+        
+              <div class="card-body">
+                <div class="row text-center mb-3 border-bottom border-secondary pb-2">
+                  <div class="col-4"><strong><%= matchup.points %></strong> PTS</div>
+                  <div class="col-4"><strong><%= matchup.assists %></strong> AST</div>
+                  <div class="col-4"><strong><%= matchup.rebounds %></strong> REB</div>
+                </div>
+        
+                <p class="card-text text-light-50 italic">
+                  <%= matchup.notes %>
+                </p>
+        
+                <div class="mt-3 text-end">
+                  <a href="/matchups/<%= playerId %>/edit/<%= matchup.id %>" class="btn btn-sm btn-outline-warning me-2">
+                    Manage
+                  </a>
+                  <button class="btn btn-sm btn-outline-danger">
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          <% }) %>
   
         </div> </div>
     </div>

@@ -73,21 +73,28 @@ router.post('/:playerSlug/add', (req, res) => {
 
 
 // GET player matchup notes list page
-router.get('/:playerSlug', function(req, res, next) {
-    const slugFromUrl = req.params.playerSlug;
+router.get('/:playerId', function(req, res, next) {
+    const playerId = req.params.playerId;
+    const player = req.db.getPlayerById(playerId);
+    const playerName = player.name;
+    const matchups = req.db.getAllPlayerMatchupNotes(playerId);
 
-    // formatted slug for display, may remove this when database retrieval is implemented
-    // as the database will store the display name
-    const formattedName = slugFromUrl.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-
-    // DATABASE PLAYER MATCHUP NOTES RETRIEVAL HERE TODO
+    // since matchups only stores opponent ids, get all the opponent actual names
+    // this may be a design problem with the database itself, but it's fine for now
+    const matchupsOppNames = matchups.map(matchup => {
+        const opponent = req.db.getPlayerById(matchup.opponentId);
+        return {
+            ...matchup,
+            opponentName: opponent ? opponent.name : 'Unknown Player Name'
+        };
+    });
+    
 
     res.render('matchup-notes-player', { 
-        title: `${formattedName} Matchup Notes - NBA Player Matchup Notes`,
-        playerSlug: slugFromUrl,
-        playerName: formattedName
+        title: `${playerName} Matchup Notes - NBA Player Matchup Notes`,
+        matchups: matchupsOppNames,
+        playerName: playerName,
+        playerId: playerId,
     });
 });
 
