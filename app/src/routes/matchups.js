@@ -75,6 +75,7 @@ router.post('/:playerSlug/add', (req, res) => {
 // GET player matchup notes list page
 router.get('/:playerId', function(req, res, next) {
     const playerId = req.params.playerId;
+    const dropdownOppId = req.query.opponent || 'all';
     const player = req.db.getPlayerById(playerId);
     const playerName = player.name;
     const matchups = req.db.getAllPlayerMatchupNotes(playerId);
@@ -88,6 +89,25 @@ router.get('/:playerId', function(req, res, next) {
             opponentName: opponent ? opponent.name : 'Unknown Player Name'
         };
     });
+
+    if (dropdownOppId !== 'all') {
+        matchupsOppNames = matchupsOppNames.filter(
+            m => String(m.opponentId) === String(dropdownOppId)
+        );
+    }
+
+    // for opponents select dropdown in EJS page
+    const opponents = [];
+    const seen = new Set();
+    matchups.forEach(m => {
+        if (!seen.has(m.opponentId)) {
+            const opponent = req.db.getPlayerById(m.opponentId);
+            if (opponent) {
+                opponents.push(opponent);
+                seen.add(m.opponentId);
+            }
+        }
+    });
     
 
     res.render('matchup-notes-player', { 
@@ -95,6 +115,8 @@ router.get('/:playerId', function(req, res, next) {
         matchups: matchupsOppNames,
         playerName: playerName,
         playerId: playerId,
+        opponents,
+        dropdownOppId
     });
 });
 

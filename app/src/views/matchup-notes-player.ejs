@@ -9,10 +9,27 @@
         <div class="row mb-4 align-items-center">
           <div class="col-md-6">
             <label class="form-label fw-bold">Displaying Matchup Notes Against:</label>
-            <select class="form-select bg-secondary text-white border-0">
-              <option selected>Everyone</option>
-              <option value="1">Stephen Curry</option>
+            <form id="filterForm" method="GET" action="/matchups/<%= playerId %>">
+            <select
+            class="form-select bg-secondary text-white border-0"
+            onchange="this.form.submit()"
+            name="opponent"
+            form="filterForm"
+            >
+              <option value="all" <%= dropdownOppId === 'all' ? 'selected' : '' %>>
+                Everyone
+              </option>
+          
+              <% opponents.forEach(opponent => { %>
+                <option 
+                  value="<%= opponent.id %>" 
+                  <%= String(dropdownOppId) === String(opponent.id) ? 'selected' : '' %>
+                >
+                  <%= opponent.name %>
+                </option>
+              <% }) %>
             </select>
+            </form>
           </div>
           <div class="col-md-6 text-md-end mt-3 mt-md-0">
             <a href="/matchups/<%= playerId %>/add" class="btn btn-success">+ Add New Note</a>
@@ -24,7 +41,7 @@
         <div class="matchup-list">
           
           <% if (matchups.length === 0) { %> 
-            <p>No matchup notes yet.</p>
+            <p>No matchup notes to display.</p>
           <% } %>
 
           <% matchups.forEach(matchup => { %>

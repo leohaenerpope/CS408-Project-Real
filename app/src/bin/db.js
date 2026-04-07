@@ -17,8 +17,16 @@ const createMatchupNotesTableSQL = `
     points INTEGER,
     assists INTEGER,
     rebounds INTEGER,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`;
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (player_id)
+      REFERENCES players(id)
+      ON DELETE CASCADE,
+
+    FOREIGN KEY (opponent_id)
+      REFERENCES players(id)
+      ON DELETE CASCADE
+  )`; // declares that player/opponent ids must be real things from the players database, if not, delete everything containing them
 
 
 function createDatabaseManager(dbPath) {
