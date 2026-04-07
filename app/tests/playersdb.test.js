@@ -35,5 +35,32 @@ test.describe('Players Database Tests', () => {
         const players = dbManager.getAllPlayers();
         expect(players.length).toBe(0);
     });
+
+     // basic delete functionality
+     test('delete player functionality: player removed from players DB', async () => {
+        const playersBefore = dbManager.getAllPlayers();
+        const player1 = playersBefore[0];
+        dbManager.deletePlayer(player1.id);
+
+        const playersAfter = dbManager.getAllPlayers();
+        // first players
+        expect(playersAfter.length).toBe(playersBefore.length - 1);
+    });
+
+    // deleting a player should remove player and all matchup notes associated with them
+    test('delete player functionality: deletes players and matchup notes', async () => {
+        const playersBefore = dbManager.getAllPlayers();
+        const player1 = playersBefore[0];
+        const player1MatchupsBefore = dbManager.getAllPlayerMatchupNotes(player1.id);
+        dbManager.deletePlayer(player1.id);
+
+        const playersAfter = dbManager.getAllPlayers();
+        const player1MatchupsAfter = dbManager.getAllPlayerMatchupNotes(player1.id);
+        // first players
+        expect(playersAfter.length).toBe(playersBefore.length - 1);
+
+        // matchup notes should be empty
+        expect(player1MatchupsAfter).toEqual([]);
+    });
   });
   
