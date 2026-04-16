@@ -31,44 +31,50 @@ router.post('/:playerSlug/edit/:matchupId', function(req, res) {
 });
 
 // POST delete Note
-router.post('/:playerSlug/delete/:matchupId', function(req, res) {
-    const { playerSlug, matchupId } = req.params;
-    // Logic to remove the note would go here
-    res.redirect(`/matchups/${playerSlug}`);
+router.post('/:playerId/delete/:matchupId', function(req, res) {
+    const { playerId, matchupId } = req.params;
+    req.db.deleteMatchupNote(matchupId);
+    res.redirect(`/matchups/${playerId}`);
 });
 
 
 
 
 // GET add player page
-router.get('/:playerSlug/add', (req, res) => {
-	const slugFromUrl = req.params.playerSlug;
+router.get('/:playerId/add', (req, res) => {
+	const playerId = req.params.playerId;
 
-    // formatted slug for display, may remove this when database retrieval is implemented
-    // as the database will store the display name
-    const formattedName = slugFromUrl.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    const player = req.db.getPlayerById(playerId);
+    const playerName = player.name;
 
     // DATABASE PLAYER MATCHUP NOTES RETRIEVAL HERE TODO
 
     res.render('matchup-notes-add', { 
-        title: `Add Matchup Note for ${formattedName} - NBA Player Matchup Notes`,
-        playerSlug: slugFromUrl,
-        playerName: formattedName
+        title: `Add Matchup Note for ${playerName} - NBA Player Matchup Notes`,
+        playerId: playerId,
+        playerName: playerName
     });
 });
   
 // POST for add player page
-router.post('/:playerSlug/add', (req, res) => {
-	const playerSlug = req.params.playerSlug;
+router.post('/:playerId/add', (req, res) => {
+    const playerId = req.params.playerId;
 
     // DATABASE SAVING HERE TODO
-    const { opponent, points, assists, rebounds, notes } = req.body;
+    const { opponent, matchupDate, points, assists, rebounds, notes } = req.body;
 
+    const opponentDb = req.db.getPlayerByName(opponent);
+
+    if (!opponentDb) {
+        // return error, maybe like in the add player thing
+        return res.send('Opponent not found in database');
+    }
+    const opponentId = opponentDb.id;
+
+    req.db.createMatchupNote({playerId, opponentId, notes, matchup_date: matchupDate, points, assists, rebounds})
     // 2. Redirect back to the dynamic player page
     // This will send them to: http://localhost:3000/matchups/lebron-james
-    res.redirect(`/matchups/${playerSlug}`);
+    res.redirect(`/matchups/${playerId}`);
 });
 
 
@@ -82,17 +88,17 @@ router.get('/:playerId', function(req, res, next) {
 
     // since matchups only stores opponent ids, get all the opponent actual names
     // this may be a design problem with the database itself, but it's fine for now
-    const matchupsOppNames = matchups.map(matchup => {
-        const opponent = req.db.getPlayerById(matchup.opponentId);
+    let matchupsOppNames = matchups.map(matchup => {
         return {
             ...matchup,
-            opponentName: opponent ? opponent.name : 'Unknown Player Name'
+            opponentName: matchup.opponent_name,
+            formattedDate: matchup.matchup_date ? matchup.matchup_date .toString().split('T')[0] : ''   
         };
     });
 
     if (dropdownOppId !== 'all') {
         matchupsOppNames = matchupsOppNames.filter(
-            m => String(m.opponentId) === String(dropdownOppId)
+            m => String(m.opponent_id) === String(dropdownOppId)
         );
     }
 
@@ -100,11 +106,11 @@ router.get('/:playerId', function(req, res, next) {
     const opponents = [];
     const seen = new Set();
     matchups.forEach(m => {
-        if (!seen.has(m.opponentId)) {
-            const opponent = req.db.getPlayerById(m.opponentId);
+        if (!seen.has(m.opponent_id)) {
+            const opponent = req.db.getPlayerById(m.opponent_id);
             if (opponent) {
                 opponents.push(opponent);
-                seen.add(m.opponentId);
+                seen.add(m.opponent_id);
             }
         }
     });

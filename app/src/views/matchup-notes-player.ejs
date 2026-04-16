@@ -48,7 +48,7 @@
             <div class="card bg-dark text-white border-primary mb-4">
               <div class="card-header bg-primary d-flex justify-content-between">
                 <span><strong>Against:</strong> <%= matchup.opponentName %></span>
-                <span><strong>Matchup Date:</strong> <%= matchup.date %></span>
+                <span><strong>Matchup Date:</strong> <%= matchup.formattedDate %></span>
               </div>
         
               <div class="card-body">
@@ -66,9 +66,11 @@
                   <a href="/matchups/<%= playerId %>/edit/<%= matchup.id %>" class="btn btn-sm btn-outline-warning me-2">
                     Manage
                   </a>
-                  <button class="btn btn-sm btn-outline-danger">
-                    Delete
-                  </button>
+                  <form action="/matchups/<%= playerId %>/delete/<%= matchup.id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      Delete
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>

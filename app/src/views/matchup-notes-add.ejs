@@ -2,7 +2,7 @@
     <h2 class="text-white mb-4">Add Matchup Note for <%= playerName %></h2>
     
     <div class="card bg-dark text-white p-4">
-      <form action="/matchups/<%= playerSlug %>/add" method="POST">
+      <form action="/matchups/<%= playerId %>/add" method="POST">
         
         <div class="mb-3">
           <label class="form-label">Opponent Name</label>
@@ -35,7 +35,7 @@
         </div>
   
         <button type="submit" class="btn btn-success">Create Matchup Note</button>
-        <a href="/matchups/<%= playerSlug %>" class="btn btn-outline-light">Cancel</a>
+        <a href="/matchups/<%= playerId %>" class="btn btn-outline-light">Cancel</a>
       </form>
     </div>
   </div>
