@@ -1,4 +1,18 @@
-<div class="container mt-5">
+<style>
+  body {
+    /* Replace the URL with your image path (e.g., /images/court.jpg) */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('/images/home.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+</style>
+
+<div class="container py-5">
+
+  <!-- Title -->
     <div class="card bg-dark text-white shadow">
       <div class="card-header border-primary">
         <h2 class="mb-0 text-center">Player List</h2>
@@ -12,6 +26,7 @@
             </tr>
           </thead>
 
+          <!-- Display players -->
           <tbody>
             <% if (players.length === 0) { %>
               <tr>

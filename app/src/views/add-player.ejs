@@ -1,3 +1,15 @@
+<style>
+  body {
+    /* Replace the URL with your image path (e.g., /images/court.jpg) */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('/images/home.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -5,11 +17,14 @@
           <div class="card-header bg-primary text-center">
             <h3 class="mb-0">Add New Player</h3>
           </div>
+          <!-- Display error if error was input to page -->
           <% if (typeof error !== 'undefined' && error) { %>
             <div class="alert alert-danger">
               <%= error %>
             </div>
           <% } %>
+
+          <!-- Form for new player submission-->
           <div class="card-body p-4">
             <form action="/players/add" method="POST">
               <div class="mb-3">
