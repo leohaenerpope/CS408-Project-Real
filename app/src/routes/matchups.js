@@ -59,21 +59,35 @@ router.get('/:playerId/add', (req, res) => {
 // POST for add player page
 router.post('/:playerId/add', (req, res) => {
     const playerId = req.params.playerId;
+    const playerName = req.db.getPlayerById(playerId).name
 
-    // DATABASE SAVING HERE TODO
     const { opponent, matchupDate, points, assists, rebounds, notes } = req.body;
 
     const opponentDb = req.db.getPlayerByName(opponent);
 
+    // Make sure that opponent is recognized in database
     if (!opponentDb) {
-        // return error, maybe like in the add player thing
-        return res.send('Opponent not found in database');
+        return res.render('matchup-notes-add', { 
+            title: `Add Matchup Note for ${playerName} - NBA Player Matchup Notes`,
+            playerId: playerId,
+            playerName: playerName,
+            error: "Failed to add matchup note: opponent name not recognized."
+        });
     }
     const opponentId = opponentDb.id;
 
+    // Check if opponent isn't same as player
+    // Check as strings because playerId is String and ooponentId is int
+    if (String(opponentId) === String(playerId)) {
+        return res.render('matchup-notes-add', { 
+            title: `Add Matchup Note for ${playerName} - NBA Player Matchup Notes`,
+            playerId: playerId,
+            playerName: playerName,
+            error: "Failed to add matchup note: Player and opponent cannot be the same person!"
+        });
+    }
+
     req.db.createMatchupNote({playerId, opponentId, notes, matchup_date: matchupDate, points, assists, rebounds})
-    // 2. Redirect back to the dynamic player page
-    // This will send them to: http://localhost:3000/matchups/lebron-james
     res.redirect(`/matchups/${playerId}`);
 });
 

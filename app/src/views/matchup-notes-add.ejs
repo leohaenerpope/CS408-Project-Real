@@ -1,5 +1,11 @@
 <div class="container py-5">
     <h2 class="text-white mb-4">Add Matchup Note for <%= playerName %></h2>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
     
     <div class="card bg-dark text-white p-4">
       <form action="/matchups/<%= playerId %>/add" method="POST">
