@@ -124,6 +124,15 @@ function createDatabaseManager(dbPath) {
         return database.prepare(sql).all(playerId);
       },
 
+      getMatchupNoteById: (matchupNoteId) => {
+        const sql = `
+        SELECT *
+        FROM matchup_notes
+        WHERE id = ?
+        `;
+        return database.prepare(sql).get(matchupNoteId);
+      },
+
       createMatchupNote: (note) => {
         const {playerId, opponentId, notes, matchup_date, points, assists, rebounds} = note;
         const sql = `
@@ -138,19 +147,14 @@ function createDatabaseManager(dbPath) {
       },
 
       updateMatchupNote: (id, note) => {
-        const existing = database.prepare('SELECT * FROM matchup_notes WHERE id = ?').get(id);
-        if (!existing) return 0;
-
-        const realData = {...existing, ...note}
-
         const info = database.prepare(
           'UPDATE matchup_notes SET notes = ?, matchup_date = ?, points = ?, assists = ?, rebounds = ? WHERE id = ?'
         ).run(
-          realData.notes,
-          realData.matchup_date,
-          realData.points,
-          realData.assists,
-          realData.rebounds,
+          note.notes,
+          note.matchup_date,
+          note.points,
+          note.assists,
+          note.rebounds,
           id);
         return info.changes
       },

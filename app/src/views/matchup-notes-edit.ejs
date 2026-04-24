@@ -1,23 +1,20 @@
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="text-white">Edit Matchup Note</h2>
-      <form action="/matchups/<%= playerSlug %>/delete/<%= note.id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this note?');">
+      <h2 class="text-white">Edit Matchup Note For: <span class="text-info"><%= playerName %></span> Against Opponent <span class="text-info"><%= note.opponent %></span></h2>
+      <form action="/matchups/<%= playerId %>/delete/<%= note.id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this note?');">
         <button type="submit" class="btn btn-outline-danger">Delete Note</button>
       </form>
     </div>
     
     <div class="card bg-dark text-white p-4 shadow-lg border-secondary">
-      <form action="/matchups/<%= playerSlug %>/edit/<%= note.id %>" method="POST">
+      <form action="/matchups/<%= playerId %>/edit/<%= note.id %>" method="POST">
         
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label fw-bold">Matchup Date</label>
-            <input type="date" name="matchupDate" value="<%= note.matchupDate %>" class="form-control bg-secondary text-white border-0" required>
+            <input type="date" name="matchupDate" value="<%= note.matchupDate ? note.matchupDate.split('T')[0] : '' %>" class="form-control bg-secondary text-white border-0" required>
           </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Opponent Name</label>
-            <input type="text" name="opponent" value="<%= note.opponent %>" class="form-control bg-secondary text-white border-0" required>
-          </div>
+          
         </div>
   
         <div class="row mb-3 text-center">
@@ -42,7 +39,7 @@
   
         <div class="d-flex gap-2">
           <button type="submit" class="btn btn-primary px-5">Save Changes</button>
-          <a href="/matchups/<%= playerSlug %>" class="btn btn-outline-light">Cancel</a>
+          <a href="/matchups/<%= playerId %>" class="btn btn-outline-light">Cancel</a>
         </div>
       </form>
     </div>

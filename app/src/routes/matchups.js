@@ -2,32 +2,42 @@ var express = require('express');
 var router = express.Router();
 
 // GET for showing the Edit Form
-router.get('/:playerSlug/edit/:matchupId', function(req, res) {
-    const { playerSlug, matchupId } = req.params;
+router.get('/:playerId/edit/:matchupId', function(req, res) {
+    const { playerId, matchupId } = req.params;
 
-    // STUB
+    const sqlNote = req.db.getMatchupNoteById(matchupId);
+
+    const playerName = req.db.getPlayerById(playerId).name;
+    const opponentName = req.db.getPlayerById(sqlNote.opponent_id).name;
+
+
     const existingNote = {
-        id: matchupId,
-        matchupDate: '2026-03-10',
-        opponent: 'Stephen Curry',
-        points: 28,
-        assists: 8,
-        rebounds: 4,
-        notes: 'Curry is too small and no match for lebron'
+        id: sqlNote.id,
+        matchupDate: sqlNote.matchup_date,
+        opponent: opponentName,
+        points: sqlNote.points,
+        assists: sqlNote.assists,
+        rebounds: sqlNote.rebounds,
+        notes: sqlNote.notes
     };
 
     res.render('matchup-notes-edit', {
         title: 'Edit Matchup Note - NBA Player Matchup Notes',
-        playerSlug: playerSlug,
-        note: existingNote
+        playerId: playerId,
+        note: existingNote,
+        playerName: playerName
     });
 });
 
-// POST save Changes
-router.post('/:playerSlug/edit/:matchupId', function(req, res) {
-    const { playerSlug, matchupId } = req.params;
-    // Logic to update the database would go here
-    res.redirect(`/matchups/${playerSlug}`);
+// POST save Changes to matchup note
+router.post('/:playerId/edit/:matchupId', function(req, res) {
+    const playerId = req.params.playerId;
+    const matchupId = req.params.matchupId;
+    const { matchupDate, points, assists, rebounds, notes } = req.body; //may remove this
+    const editMatchupData = req.body;
+    req.db.updateMatchupNote(matchupId, editMatchupData);
+
+    res.redirect(`/matchups/${playerId}`);
 });
 
 // POST delete Note
