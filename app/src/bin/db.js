@@ -165,9 +165,6 @@ function createDatabaseManager(dbPath) {
       },
   };
 
-  // TODO: THIS WILL BE CHANGED FOR CHECKPOINT 3 TO ADD FULL USER ABILITY TO ADD/REMOVE
-  // THINGS FROM A DATABASE THAT THEY WILL MAKE THEMSELVES, NOT JUST A SAMPLE DATABASE
-
   return {
     dbHelpers
   };
