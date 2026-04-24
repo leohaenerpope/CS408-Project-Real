@@ -10,10 +10,17 @@ router.get('/:playerId/edit/:matchupId', function(req, res) {
     const playerName = req.db.getPlayerById(playerId).name;
     const opponentName = req.db.getPlayerById(sqlNote.opponent_id).name;
 
+    const rawDate = sqlNote.matchup_date;
+    let formattedDate = '';
+    if (rawDate) {
+        const d = new Date(rawDate);
+        formattedDate = d.toISOString().split('T')[0];
+    }
+
 
     const existingNote = {
         id: sqlNote.id,
-        matchupDate: sqlNote.matchup_date,
+        matchupDate: formattedDate,
         opponent: opponentName,
         points: sqlNote.points,
         assists: sqlNote.assists,
@@ -33,8 +40,11 @@ router.get('/:playerId/edit/:matchupId', function(req, res) {
 router.post('/:playerId/edit/:matchupId', function(req, res) {
     const playerId = req.params.playerId;
     const matchupId = req.params.matchupId;
-    const { matchupDate, points, assists, rebounds, notes } = req.body; //may remove this
-    const editMatchupData = req.body;
+    const { matchupDate, points, assists, rebounds, notes } = req.body; 
+    const editMatchupData = {
+        matchup_date: matchupDate, //matchup dates sql variable matches
+        points, assists, rebounds, notes
+    };
     req.db.updateMatchupNote(matchupId, editMatchupData);
 
     res.redirect(`/matchups/${playerId}`);
