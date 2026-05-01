@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true, // Run tests serially to avoid database conflicts
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 5, // Multiple workers to run tests in parallel
+  workers: 1, // Multiple workers to run tests in parallel
   reporter: 'html',
 
   use: {
