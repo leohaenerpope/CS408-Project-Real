@@ -5,8 +5,6 @@ Express, and SQLite. It includes scripts and documentation for setting up,
 configuring, and deploying the application on an AWS EC2 instance. The application
 uses Docker for containerization and simplified deployment.
 
-The application itself is a NBA Player Matchup Notes Tracker. Users are able to create players with names, and then create matchup notes for the players against other existing players. Users can track different stats about how players do against each other on specific dates, including points, assists, rebounds, general notes. As of now, the database system is universal (no account system, just a global database) so users share their information with others.
-
 - [Development Guide (Docker)](dev-node/README.md)
 - [Deployment Guide (Docker)](deploy-docker/README.md)
 
