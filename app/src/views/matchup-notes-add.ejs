@@ -1,13 +1,23 @@
 <div class="container py-5">
-    <h2 class="text-white mb-4">Add Matchup Note for <%= playerName %></h2>
 
     <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert alert-danger">
         <%= error %>
       </div>
     <% } %>
+
     
-    <div class="card bg-dark text-white p-4">
+    
+    <div class="card bg-dark text-white shadow">
+      <div class="card-header custom-card text-center">
+        <h2 class="mb-0">
+          Add Matchup Note for 
+          <span class="text-info"><%= playerName %></span>
+        </h2>
+      </div>
+    <div class="card-body bg-dark p-4">
+
+      
       <form action="/matchups/<%= playerId %>/add" method="POST">
         
         <div class="mb-3">
@@ -43,5 +53,6 @@
         <button type="submit" class="btn btn-success">Create Matchup Note</button>
         <a href="/matchups/<%= playerId %>" class="btn btn-outline-light">Cancel</a>
       </form>
+    </div>
     </div>
   </div>

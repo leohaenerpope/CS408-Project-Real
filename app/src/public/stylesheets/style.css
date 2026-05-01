@@ -1,5 +1,13 @@
 body {
-  background: linear-gradient(135deg, #111111 0%, #111111 100%);
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%),
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('/images/home.jpg');
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   min-height: 100vh;
   padding: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -43,3 +51,20 @@ a {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
 }
+
+.btn-primary {
+  background-color: var(--bs-purple);
+  border-color: var(--bs-purple);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #5a32a3;
+}
+
+.custom-card {
+  background: rgba(0, 3, 15, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+} 
